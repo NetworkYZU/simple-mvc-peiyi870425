@@ -6,6 +6,7 @@
 package lendle.courses.network.simplemvc;
 
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +34,28 @@ public class ShowScore extends HttpServlet {
         String id=request.getParameter("id");
         String address=null;
         //按照分數選擇頁面
-        request.getRequestDispatcher(address).forward(request, response);
+       
+        Student std=Student.getStudent(id);
+        if(std==null){
+            
+        }else if(std.getScore()<60){
+            request.setAttribute("student", std);
+            RequestDispatcher rd = request.getRequestDispatcher("/score-report/LowScore.jsp");
+            rd.forward(request, response);
+        }else if(std.getScore()>=60 && std.getScore()<80){
+            request.setAttribute("student", std);
+            RequestDispatcher rd = request.getRequestDispatcher("/score-report/NormalScore.jsp");
+            rd.forward(request, response);
+        }else if(std.getScore()>=80){
+            request.setAttribute("student", std);
+            RequestDispatcher rd = request.getRequestDispatcher("/score-report/HighScore.jsp");
+            rd.forward(request, response);
+        }else{
+            request.setAttribute("student", std);
+            RequestDispatcher rd = request.getRequestDispatcher("/score-report/UnknownStudent.jsp");
+            rd.forward(request, response);
+        }
+        //request.getRequestDispatcher(address).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
